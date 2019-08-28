@@ -1,9 +1,5 @@
 package com.ljljob.action;
 
-import com.sun.org.apache.xpath.internal.SourceTree;
-
-import java.util.Comparator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -40,6 +36,7 @@ public class CollectorsTest {
     }
 
     public static void testCounting(){
-        Optional.ofNullable(menu.stream().filter(t->t.getCalories()>500))
+        Optional.ofNullable(menu.stream().filter(t->t.getCalories()>500));
+        System.out.println(123123);
     }
 }
