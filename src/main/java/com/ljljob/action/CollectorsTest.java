@@ -1,6 +1,12 @@
 package com.ljljob.action;
 
+import com.sun.xml.internal.bind.v2.runtime.reflect.opt.OptimizedAccessorFactory;
+
+import java.rmi.MarshalException;
 import java.util.*;
+import java.util.concurrent.ConcurrentMap;
+import java.util.function.BinaryOperator;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -22,7 +28,14 @@ public class CollectorsTest {
 //        testJoinWithSpliter();
 //        testJoinWithDelimitAndPrefixAndSuffix();
 //        testMapping();
-        testMaxByAndMinBy();
+//        testMaxByAndMinBy();
+//        testPartitioningBy();
+//        testPartitioningByWithDownstream();
+//        testReduce();
+//        testReduceWithIndentifyAndBinaryOperator();
+//        testSummarizing();
+//        testSumming();
+        testToMap();
     }
 
     public static void testAverage() {
@@ -86,13 +99,69 @@ public class CollectorsTest {
         Optional.ofNullable(result).ifPresent(System.out::println);
     }
 
-    public static void testMapping2(){
+    public static void testMapping2() {
         Integer result = menu.stream().collect(Collectors.mapping(Dish::getCalories, Collectors.summingInt(Integer::valueOf)));
         Optional.ofNullable(result).ifPresent(System.out::println);
     }
 
-    public static void testMaxByAndMinBy(){
+    public static void testMaxByAndMinBy() {
         menu.stream().collect(Collectors.maxBy(Comparator.comparing(Dish::getCalories))).ifPresent(System.out::println);
         menu.stream().collect(Collectors.minBy(Comparator.comparing(Dish::getCalories))).ifPresent(System.out::println);
     }
+
+    public static void testPartitioningBy() {
+        Map<Boolean, List<Dish>> result = menu.stream().collect(Collectors.partitioningBy(t -> t.getCalories() > 300));
+        Optional.ofNullable(result).ifPresent(System.out::println);
+    }
+
+    public static void testPartitioningByWithDownstream() {
+        Map<Boolean, Integer> result = menu.stream().collect(Collectors.partitioningBy(t -> t.getCalories() > 300, Collectors.summingInt(Dish::getCalories)));
+        Optional.ofNullable(result).ifPresent(System.out::println);
+        Map<Boolean, Long> result2 = menu.stream().collect(Collectors.partitioningBy(t -> t.getCalories() > 300, Collectors.counting()));
+        Optional.ofNullable(result2).ifPresent(System.out::println);
+    }
+
+    public static void testReduce() {
+        Optional<Dish> max = menu.stream().collect(Collectors.reducing(BinaryOperator.maxBy(Comparator.comparing(Dish::getCalories))));
+        max.ifPresent(System.out::println);
+        menu.stream().collect(Collectors.reducing(BinaryOperator.minBy(Comparator.comparing(Dish::getCalories)))).ifPresent(System.out::println);
+        menu.stream().map(Dish::getCalories).collect(Collectors.reducing(Integer::sum)).ifPresent(System.out::println);
+    }
+
+    public static void testReduceWithIdentify() {
+        // identify 类似于一个init值
+        menu.stream().map(Dish::getCalories).collect(Collectors.reducing(0, Integer::sum));
+    }
+
+    public static void testReduceWithIndentifyAndBinaryOperator() {
+        Integer result = menu.stream().collect(Collectors.reducing(0, Dish::getCalories, Integer::sum));
+        Optional.ofNullable(result).ifPresent(System.out::println);
+    }
+
+    public static void testSummarizing() {
+        Optional.ofNullable(menu.stream().collect(Collectors.summarizingInt(t -> Integer.valueOf(t.getCalories())))).ifPresent(System.out::println);
+        Optional.ofNullable(menu.stream().collect(Collectors.summarizingDouble(t -> Double.valueOf(t.getCalories())))).ifPresent(System.out::println);
+        Optional.ofNullable(menu.stream().collect(Collectors.summarizingLong(t -> Long.valueOf(t.getCalories())))).ifPresent(System.out::println);
+        LongSummaryStatistics result = menu.stream().collect(Collectors.summarizingLong(t -> Long.valueOf(t.getCalories())));
+        result.getAverage();
+    }
+
+    public static void testSumming() {
+        Optional.ofNullable(menu.stream().collect(Collectors.summingInt(Dish::getCalories))).ifPresent(System.out::println);
+        Optional.ofNullable(menu.stream().collect(Collectors.summingDouble(t -> Double.valueOf(t.getCalories())))).ifPresent(System.out::println);
+        Optional.ofNullable(menu.stream().collect(Collectors.summingLong(t -> Long.valueOf(t.getCalories())))).ifPresent(System.out::println);
+    }
+
+    public static void testToMap() {
+//        Optional.ofNullable(menu.stream().collect(Collectors.toMap(Dish::getName, Function.identity()))).ifPresent(System.out::println);
+        Map<Dish.Type, Integer> result = menu.stream().collect(Collectors.toMap(Dish::getType, Dish::getCalories, (pre, next) -> pre + next));
+        Optional.ofNullable(result).ifPresent(System.out::println);
+    }
+
+    public static void testToConcurrentMap(){
+        ConcurrentMap<Dish.Type, Integer> result = menu.stream().collect(Collectors.toConcurrentMap(Dish::getType, Dish::getCalories, Integer::sum));
+        Optional.ofNullable(result).ifPresent(System.out::println);
+        Optional.ofNullable(result.getClass()).ifPresent(System.out::println);
+    }
+
 }
