@@ -16,8 +16,8 @@ public class FeatureTest {
     }
 
     private static void futureWithConsumer() {
-        FeatureService<String> featureService = new FeatureService<>();
-        featureService.submit(() -> {
+        FutureService<String> futureService = new FutureService<>();
+        futureService.submit(() -> {
             try {
                 Thread.sleep(3000);
             } catch (InterruptedException e) {
@@ -36,9 +36,9 @@ public class FeatureTest {
     }
 
     private static void singleFuture() throws InterruptedException {
-        FeatureService<String> featureService = new FeatureService<>();
+        FutureService<String> futureService = new FutureService<>();
 
-        Feature<String> feature = featureService.submit(() -> {
+        Future<String> future = futureService.submit(() -> {
             try {
                 Thread.sleep(3000);
             } catch (InterruptedException e) {
@@ -56,6 +56,6 @@ public class FeatureTest {
         }
         System.out.println("do my task FINISH!!");
 
-        System.out.println(feature.get());
+        System.out.println(future.get());
     }
 }

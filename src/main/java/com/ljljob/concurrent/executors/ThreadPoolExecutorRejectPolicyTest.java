@@ -15,6 +15,8 @@ public class ThreadPoolExecutorRejectPolicyTest {
     public static void main(String[] args) throws InterruptedException {
 //        testAbortPolicy();
 //        testDiscardPolicy();
+//        testDiscardOldestPolicy();
+        testCallerPolicy();
     }
 
     /**
@@ -23,7 +25,7 @@ public class ThreadPoolExecutorRejectPolicyTest {
     public static void testAbortPolicy() {
         ExecutorService executorService = new ThreadPoolExecutor(1, 1, 0, TimeUnit.SECONDS, new LinkedBlockingQueue<>(1), Thread::new, new ThreadPoolExecutor.AbortPolicy());
         IntStream.rangeClosed(1, 5).boxed().forEach(i -> {
-            executorService.submit(() -> System.out.println(Thread.currentThread().getName()));
+            executorService.submit(() -> System.out.println(Thread.currentThread().getName() + "- " + i));
         });
         executorService.shutdown();
     }
@@ -31,7 +33,22 @@ public class ThreadPoolExecutorRejectPolicyTest {
     public static void testDiscardPolicy() {
         ExecutorService executorService = new ThreadPoolExecutor(1, 1, 0, TimeUnit.SECONDS, new LinkedBlockingQueue<>(1), Thread::new, new ThreadPoolExecutor.DiscardPolicy());
         IntStream.rangeClosed(1, 5).boxed().forEach(i -> {
-            executorService.submit(() -> System.out.println(Thread.currentThread().getName()));
+            executorService.submit(() -> System.out.println(Thread.currentThread().getName() + "- " + i));
+        });
+        executorService.shutdown();
+    }
+
+    public static void testDiscardOldestPolicy() {
+        ExecutorService executorService = new ThreadPoolExecutor(1, 1, 0, TimeUnit.SECONDS, new LinkedBlockingQueue<>(1), Thread::new, new ThreadPoolExecutor.DiscardOldestPolicy());
+        IntStream.rangeClosed(1, 5).boxed().forEach(i -> {
+            executorService.submit(() -> System.out.println(Thread.currentThread().getName() + "- " + i));
+        });
+        executorService.shutdown();
+    }
+    public static void testCallerPolicy() {
+        ExecutorService executorService = new ThreadPoolExecutor(1, 1, 0, TimeUnit.SECONDS, new LinkedBlockingQueue<>(1), Thread::new, new ThreadPoolExecutor.CallerRunsPolicy());
+        IntStream.rangeClosed(1, 5).boxed().forEach(i -> {
+            executorService.submit(() -> System.out.println(Thread.currentThread().getName() + "- " + i));
         });
         executorService.shutdown();
     }

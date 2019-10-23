@@ -6,8 +6,7 @@ package com.ljljob.designer.feature;
  * @Function:
  * @Version 1.0
  */
-public interface Feature<T> {
-
-    T get() throws InterruptedException;
-
+@FunctionalInterface
+public interface FutureTask<T> {
+    T call() ;
 }

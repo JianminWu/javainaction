@@ -6,7 +6,7 @@ package com.ljljob.designer.feature;
  * @Function:
  * @Version 1.0
  */
-public class AsynFeature<T> implements Feature<T> {
+public class AsynFuture<T> implements Future<T> {
     private T result;
 
     private volatile boolean done = false;
