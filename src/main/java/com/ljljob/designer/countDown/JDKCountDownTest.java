@@ -9,6 +9,10 @@ import java.util.stream.IntStream;
  * @Function:
  * @Version 1.0
  */
+
+/**
+ * 使用countDown 可以实现等待某一些线程调度执行完之后在继续执行主线程逻辑
+ */
 public class JDKCountDownTest {
 
     public static void main(String[] args) {

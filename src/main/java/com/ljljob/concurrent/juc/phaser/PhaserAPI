@@ -1,0 +1,4 @@
+PhaserAPI 整理
+register 注册一个promit
+arriveAndAwaitAdvance ->Arrives at this phaser and awaits others 完成一个phaser 并且promit -1 等待其他phaser全部完成
+Arrive方法 直接到达一个phaser 不阻塞等待其他phaser 完成直接往下执行

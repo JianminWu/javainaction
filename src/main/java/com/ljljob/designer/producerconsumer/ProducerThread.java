@@ -27,6 +27,7 @@ public class ProducerThread extends Thread {
     public void run() {
         while (true) {
             Message message = new Message("index -> " + Thread.currentThread().getName() + " " + index.incrementAndGet());
+            System.out.println("produce -> " + Thread.currentThread().getName() + " " + message.getMsg());
             messageQueue.pushMessage(message);
             try {
                 Thread.sleep(random.nextInt(1000));

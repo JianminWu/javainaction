@@ -6,7 +6,7 @@ package com.ljljob.designer.feature;
  * @Function:
  * @Version 1.0
  */
-public class FutureTest {
+public class FeatureTest {
 
 
     public static void main(String[] args) throws Exception {
@@ -16,8 +16,8 @@ public class FutureTest {
     }
 
     private static void futureWithConsumer() {
-        FutureService<String> futureService = new FutureService<>();
-        futureService.submit(() -> {
+        FeatureService<String> featureService = new FeatureService<>();
+        featureService.submit(() -> {
             try {
                 Thread.sleep(3000);
             } catch (InterruptedException e) {
@@ -36,9 +36,9 @@ public class FutureTest {
     }
 
     private static void singleFuture() throws InterruptedException {
-        FutureService<String> futureService = new FutureService<>();
+        FeatureService<String> featureService = new FeatureService<>();
 
-        Future<String> future = futureService.submit(() -> {
+        Feature<String> feature = featureService.submit(() -> {
             try {
                 Thread.sleep(3000);
             } catch (InterruptedException e) {
@@ -56,6 +56,6 @@ public class FutureTest {
         }
         System.out.println("do my task FINISH!!");
 
-        System.out.println(future.get());
+        System.out.println(feature.get());
     }
 }

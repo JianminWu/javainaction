@@ -10,10 +10,10 @@ import java.util.function.Consumer;
  * @Function:
  * @Version 1.0
  */
-public class FutureService<T> {
+public class FeatureService<T> {
 
-    public Future<T> submit(final FutureTask<T> task) {
-        AsynFuture<T> future = new AsynFuture<>();
+    public Feature<T> submit(final FeatureTask<T> task) {
+        AsynFeature<T> future = new AsynFeature<>();
         new Thread(() -> {
             T result = task.call();
             future.done(result);
@@ -21,8 +21,8 @@ public class FutureService<T> {
         return future;
     }
 
-    public Future<T> submit(final FutureTask<T> task, Consumer<T> consumer) {
-        AsynFuture<T> future = new AsynFuture<>();
+    public Feature<T> submit(final FeatureTask<T> task, Consumer<T> consumer) {
+        AsynFeature<T> future = new AsynFeature<>();
         new Thread(() -> {
             T result = task.call();
             future.done(result);

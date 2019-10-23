@@ -15,7 +15,7 @@ public class ExecutionTask implements Runnable {
 
     @Override
     public void run() {
-        ActionContext.threadLocal.set(this.context);
+        ActionContext.getInstance().setContext(this.context);
         QueryFromDBAction queryFromDBAction = new QueryFromDBAction();
         queryFromDBAction.execute();
         try {

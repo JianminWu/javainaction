@@ -11,7 +11,7 @@ public class ActionContext {
     private ActionContext() {
     }
 
-    public static final ThreadLocal<Context> threadLocal = ThreadLocal.withInitial(() -> new Context());
+    private static final ThreadLocal<Context> threadLocal = ThreadLocal.withInitial(() -> new Context());
 
     private static class InstanceHolder {
         private final static ActionContext INSTANCE = new ActionContext();
@@ -23,5 +23,9 @@ public class ActionContext {
 
     public Context getContext() {
         return threadLocal.get();
+    }
+
+    public void setContext(Context context){
+        this.threadLocal.set(context);
     }
 }
