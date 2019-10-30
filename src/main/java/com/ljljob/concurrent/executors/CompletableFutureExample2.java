@@ -24,6 +24,14 @@ import java.util.function.Function;
  * 7. {@link CompletableFuture#thenCombine(CompletionStage, BiFunction)} 将2个stage合并成一个新的stage BiFunction(stage1_result,stage2_result) 返回一个整合之后的stage_result
  * 8. {@link CompletableFuture#thenCompose(Function)}  将一个stage交给另外一个stage进行处理返回行的stage 类似stream中的map
  * 9. {@link CompletableFuture#handle(BiFunction)} 类似一个非terminated 的whenComplete BiFunction(stage_result,stage_exception)
+ *
+ *
+ * notice:
+ *  The difference has to do with the Executor that is responsible for running the code. Each operator on CompletableFuture generally has 3 versions.
+    thenApply(fn) - runs fn on a thread defined by the CompletableFuture on which it is called, so you generally cannot know where this will be executed. It might immediately execute if the result is already available.
+    thenApplyAsync(fn) - runs fn on a environment-defined executor regardless of circumstances. For CompletableFuture this will generally be ForkJoinPool.commonPool().
+    thenApplyAsync(fn,exec) - runs fn on exec.
+    In the end the result is the same, but the scheduling behavior depends on the choice of method.
  */
 public class CompletableFutureExample2 {
 
@@ -37,8 +45,23 @@ public class CompletableFutureExample2 {
 //        testEither();
 //        testCombine();
 //        testCompose();
-        testHandle();
+//        testHandle();
+        testDifferenceBetweenAsync();
         Thread.currentThread().join();
+    }
+
+    private static void testDifferenceBetweenAsync(){
+        CompletableFuture<Integer> future
+                = CompletableFuture.supplyAsync(() -> 0);
+
+        future.thenApplyAsync(x -> x + 1) // call 1 on a separate thread
+                .thenApplyAsync(x -> x + 1)
+                .thenAccept(x -> System.out.println("async result: " + x));
+
+        future.thenApply(x -> x + 1) // call 2 may execute on main thread or other thread
+                .thenApply(x -> x + 1)
+                .thenAccept(x -> System.out.println("sync result:" + x));
+
     }
 
     private static void testThenAccept() {
@@ -50,6 +73,7 @@ public class CompletableFutureExample2 {
             sleep(ThreadLocalRandom.current().nextInt(3));
             System.out.println(Thread.currentThread().getName());
             System.out.println(Thread.currentThread().hashCode());
+            sleep(50000);
             return "hello";
         }).thenAcceptAsync(t -> {
             System.out.println(Thread.currentThread().getName());
