@@ -1,11 +1,9 @@
 package com.ljljob.metrics;
 
-import ch.qos.logback.core.util.TimeUtil;
 import com.codahale.metrics.CachedGauge;
 import com.codahale.metrics.ConsoleReporter;
 import com.codahale.metrics.MetricRegistry;
 
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 
 /**

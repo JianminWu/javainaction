@@ -31,7 +31,8 @@ public class CollectorsTest {
 //        testReduceWithIndentifyAndBinaryOperator();
 //        testSummarizing();
 //        testSumming();
-        testToMap();
+//        testToMap();
+        testToConcurrentMap();
     }
 
     public static void testAverage() {
@@ -93,6 +94,8 @@ public class CollectorsTest {
 //        menu.stream().collect(Collectors.mapping(Dish::getName, Collectors.joining(",")));
 //        Integer result = menu.stream().collect(Collectors.mapping(Dish::getCalories, Collectors.summingInt(Integer::valueOf)));
         Optional.ofNullable(result).ifPresent(System.out::println);
+        Map<Object, Long> method2 = menu.stream().map(t -> new Object[]{t.getType(), 1}).collect(Collectors.groupingBy(c -> c[0], Collectors.counting()));
+        System.out.println(method2);
     }
 
     public static void testMapping2() {
