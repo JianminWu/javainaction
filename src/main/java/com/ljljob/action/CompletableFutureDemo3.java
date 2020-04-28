@@ -45,10 +45,11 @@ public class CompletableFutureDemo3 {
      * combine 编排 合并2个线程,Combine传入bifunction 参数1 线程1返回值,参数2 线程2的返回值
      */
     public static void testCombine() {
+        CompletableFuture<Double> otherCompletableFuture = CompletableFuture.supplyAsync(() -> 2.0d);
         CompletableFuture.supplyAsync(() -> 1)
                 .thenApply(i -> i * 10)
                 .thenCombine(
-                        CompletableFuture.supplyAsync(() -> 2.0d),
+                        otherCompletableFuture,
                         (r1, r2) -> r1 + r2
                 )
                 .thenAccept(System.out::println);
